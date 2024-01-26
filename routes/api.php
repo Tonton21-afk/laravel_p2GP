@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,13 +27,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::put('/user/{id}', [AuthController::class, 'updateUserById']);
+Route::get('/users', [AuthController::class, 'index']);
 
 Route::get('/user/{id}', [AuthController::class, 'getUserById']);
 
-Route::delete('/users/{id}', [AuthController::class, 'deleteUserById']);
+Route::put('/user/{id}', [AuthController::class, 'updateUserById']);
 
+Route::delete('/user/{id}', [AuthController::class, 'deleteUserById']);
 
-Route::get('testing', function (){
-    return 'tanga tanga mo bobo';
-});
+Route::middleware('auth:sanctum')->get('/check-status', [AuthController::class, 'checkAuthStatus']);
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
