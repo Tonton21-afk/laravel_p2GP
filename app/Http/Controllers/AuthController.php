@@ -55,8 +55,7 @@ class AuthController extends Controller
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
-            'message'=>'created successfully',
-            'token' => $token], 201);
+            'message'=>'created successfully',], 201);
     }
 
 
@@ -171,26 +170,36 @@ class AuthController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 500,
+                    
                     'error_message' => "Failed to delete user data."
                 ], 500);
             }
         } else {
             return response()->json([
-                'status' => 404,
+    
                 'error_message' => "No Such Data Found!"
             ], 404);
         }
     }
 
+    // check stats
+
     public function checkAuthStatus(Request $request)
-    {
-        $user = $request->user();
-    
-        if ($user) {
+{
+    $user = $request->user();
+
+    if ($user) {
+        return response()->json([
+            'message' => 'Logged In!',
+            'user' => $user,
+        ], 200);
+    } else {
+        $token = $request->cookie('token');
+
+        if ($token) {
             return response()->json([
+                'status' => false,
                 'message' => 'Logged In!',
-                'user' => $user,
             ], 200);
         } else {
             return response()->json([
@@ -199,6 +208,7 @@ class AuthController extends Controller
             ], 401);
         }
     }
+}
 
     //---------------LOGOUT------------------
     public function logout(Request $request)
@@ -208,9 +218,10 @@ class AuthController extends Controller
     if ($user) {
         $user->tokens()->delete();
 
-        // Remove the token cookie
+        
         return response()->json(['message' => 'User logged out successfully'], 200)
-            ->withoutCookie('token');
+            ->withoutCookie('token')
+            ;
     } else {
         return response()->json(['error' => 'User not authenticated'], 401);
     }
