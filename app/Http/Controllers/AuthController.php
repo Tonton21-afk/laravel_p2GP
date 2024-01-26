@@ -188,6 +188,8 @@ class AuthController extends Controller
 {
     $user = $request->user();
 
+    
+
     if ($user) {
         return response()->json([
             'message' => 'Logged In!',
@@ -218,7 +220,6 @@ class AuthController extends Controller
     if ($user) {
         $user->tokens()->delete();
 
-        
         return response()->json(['message' => 'User logged out successfully'], 200)
             ->withoutCookie('token')
             ;
@@ -227,8 +228,6 @@ class AuthController extends Controller
     }
 }
     
-
-   
 
 
 }
